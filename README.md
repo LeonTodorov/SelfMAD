@@ -28,7 +28,55 @@ conda activate selfMAD_env
 
 # Datasets
 ## Images
-TODO
+### FaceForensics++
+```
+<path to FF++ dataset>    
+└── <phase>      
+    └── <method>     
+        └── <video sequence ID>     
+            └── *.png
+```
+\<phase\> is one of: train, test or val.  
+\<method\> is one of: Deepfakes, Face2Face, FaceShifter, FaceSwap, InsightFace, NeuralTextures or real.  
+\<video sequence ID\> is in range [000, 999], the test/train/val split used is the same as the dataset author's.   
+Available at https://github.com/ondyari/FaceForensics.
+### SMDD 
+```
+<path to SMDD dataset>    
+└── m15k_t    
+    └── *.png
+└── o25k_bf_t    
+    └── *.png
+```
+Available at https://github.com/naserdamer/SMDD-Synthetic-Face-Morphing-Attack-Detection-Development-dataset.
+
+### FRLL
+```
+<path to FRLL dataset>    
+└── <method>      
+    └── *.jpg
+```
+\<method\> is one of: morph_amsl, morph_facemorpher, morph_opencv, morph_stylegan, morph_webmorph or raw.  
+Available at https://www.idiap.ch/en/scientific-research/data/frll-morphs.
+
+### FRGC
+```
+<path to FRLL dataset>    
+└── <method>      
+    └── *.jpg
+```
+\<method\> is one of: morph_facemorpher, morph_opencv, morph_stylegan or raw.   
+Available at https://www.idiap.ch/en/scientific-research/data/frgc-morphs.
+
+### FERET
+```
+<path to FERET dataset>    
+└── <method>      
+    └── *.jpg
+```
+\<method\> is one of: morph_facemorpher, morph_opencv, morph_stylegan or raw.   
+Available at https://www.idiap.ch/en/scientific-research/data/feret-morphs.
+
 ## Landmarks
 TODO
 ## Labels
