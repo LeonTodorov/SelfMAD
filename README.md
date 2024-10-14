@@ -20,7 +20,7 @@ Python 3.10
 - efficientnet-pytorch==0.7.1
 - timm==1.0.8
   
-Enviroment setup (conda):
+Environment setup (conda):
 ```bash
 conda env create -f env.yml
 conda activate selfMAD_env
