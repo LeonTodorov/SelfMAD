@@ -1,5 +1,8 @@
 # Self-supervised Morphing Attack Detection method
 ![SelfMAD](https://github.com/user-attachments/assets/d59c1b00-da81-4c57-b6b7-112dbc9292f6)
+> [**SelfMAD: Enhancing Generalization and Robustness in Morphing Attack Detection via Self-Supervised Learning**](TODO add DOI),  
+> Marija Ivanovska, Leon Todorov, Naser Damer, Deepak Kumar Jain, Peter Peer, Vitomir Štruc
+> *FG 2025 Preprint*
 The official PyTorch implementation of the paper SelfMAD: Enhancing Generalization and Robustness in Morphing
 Attack Detection via Self-Supervised Learning.
 
@@ -22,6 +25,20 @@ Conda enviroment setup:
 conda env create -f env.yml
 conda activate selfMAD_env
 ```
+# Datasets
+## Images
+TODO
+## Landmarks
+TODO
+## Labels
+TODO
 
-# Setup
+# Inference
+TODO
+# Training
+TODO
+# Evaluation
+TODO
+
+# Citation
 TODO
