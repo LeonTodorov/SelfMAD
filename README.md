@@ -78,10 +78,11 @@ Available at https://www.idiap.ch/en/scientific-research/data/frgc-morphs.
 Available at https://www.idiap.ch/en/scientific-research/data/feret-morphs.
 
 ## Landmarks
+Use the same structure as their respective datasets.
 TODO
 ## Labels
+Use the same structure as their respective datasets.
 TODO
-
 # Inference
 TODO
 # Training
