@@ -115,20 +115,23 @@ TODO
 Use the same structure as their respective datasets.
 TODO
 # Inference
-TODO
+```bash
+python infer__.py -m <model> -p <path_to_checkpoint> -in <path_to_input_img>
+```
+The output in terminal indicates the confidence that the image is a morph.
 # Training
 Before starting the training process, ensure that the dataset paths are properly configured in the `data_config.json` file.   
 Additional training parameters can be tuned in the `train_config.json` file as needed.  
 To start the training from the root directory of the project, run the following command:
 ```bash
-python src/train__.py -n <session_name>
+python train__.py -n <session_name>
 ```
 Command-line arguments (specified in `train.py`) will override any default values set in these configuration files.
 # Evaluation
 Before starting the evaluation process, ensure that the dataset paths are properly configured in the `data_config.json` file.   
 To start model evaluation from the root directory of the project, run the following command:
 ```bash
-python src/eval__.py -m <model> -p <path_to_checkpoint>
+python eval__.py -m <model> -p <path_to_checkpoint>
 ```
 # Citation
 TODO
