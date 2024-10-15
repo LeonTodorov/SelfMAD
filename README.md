@@ -27,8 +27,7 @@ conda activate selfMAD_env
 ```
 
 # Datasets
-## Images
-### FaceForensics++
+## FaceForensics++ Dataset Structure
 ```
 <path to FF++ dataset>    
 └── <phase>      
@@ -36,11 +35,26 @@ conda activate selfMAD_env
         └── <video sequence ID>     
             └── *.png
 ```
-\<phase\> is one of: train, test or val.  
-\<method\> is one of: Deepfakes, Face2Face, FaceShifter, FaceSwap, InsightFace, NeuralTextures or real.  
-\<video sequence ID\> is in range [000, 999], the test/train/val split used is the same as the dataset author's.   
-Available at https://github.com/ondyari/FaceForensics.
-### SMDD 
+- **\<phase\>** is one of:
+  - `train`
+  - `test`
+  - `val`
+  
+- **\<method\>** is one of:
+  - `Deepfakes`
+  - `Face2Face`
+  - `FaceShifter`
+  - `FaceSwap`
+  - `InsightFace`
+  - `NeuralTextures`
+  - `real`
+
+- **\<video sequence ID\>** is in the range `[000, 999]`. 
+  - The test/train/val split used is the same as the dataset author's.
+
+**Dataset Source:** [FaceForensics GitHub Repository](https://github.com/ondyari/FaceForensics).
+
+## SMDD Dataset Structure
 ```
 <path to SMDD dataset>    
 └── m15k_t    
@@ -48,34 +62,51 @@ Available at https://github.com/ondyari/FaceForensics.
 └── o25k_bf_t    
     └── *.png
 ```
-Available at https://github.com/naserdamer/SMDD-Synthetic-Face-Morphing-Attack-Detection-Development-dataset.
+**Dataset Source:**  [SMDD GitHub Repository](https://github.com/naserdamer/SMDD-Synthetic-Face-Morphing-Attack-Detection-Development-dataset).
 
-### FRLL
+## FRLL Dataset Structure
 ```
 <path to FRLL dataset>    
 └── <method>      
     └── *.jpg
 ```
-\<method\> is one of: morph_amsl, morph_facemorpher, morph_opencv, morph_stylegan, morph_webmorph or raw.  
-Available at https://www.idiap.ch/en/scientific-research/data/frll-morphs.
+- **\<method\>** is one of:
+  - `morph_amsl`
+  - `morph_facemorpher`
+  - `morph_opencv`
+  - `morph_stylegan`
+  - `morph_webmorph`
+  - `raw`
 
-### FRGC
+**Dataset Source:**  [Idiap research institute website](https://www.idiap.ch/en/scientific-research/data/frll-morphs)
+
+## FRGC Dataset Structure
 ```
 <path to FRLL dataset>    
 └── <method>      
     └── *.jpg
 ```
-\<method\> is one of: morph_facemorpher, morph_opencv, morph_stylegan or raw.   
-Available at https://www.idiap.ch/en/scientific-research/data/frgc-morphs.
+- **\<method\>** is one of:
+  - `morph_facemorpher`
+  - `morph_opencv`
+  - `morph_stylegan`
+  - `raw` 
 
-### FERET
+**Dataset Source:**  [Idiap research institute website](https://www.idiap.ch/en/scientific-research/data/frgc-morphs)
+
+## FERET Dataset Structure
 ```
 <path to FERET dataset>    
 └── <method>      
     └── *.jpg
 ```
-\<method\> is one of: morph_facemorpher, morph_opencv, morph_stylegan or raw.   
-Available at https://www.idiap.ch/en/scientific-research/data/feret-morphs.
+- **\<method\>** is one of:
+  - `morph_facemorpher`
+  - `morph_opencv`
+  - `morph_stylegan`
+  - `raw`
+
+**Dataset Source:**  [Idiap research institute website](https://www.idiap.ch/en/scientific-research/data/feret-morphs)
 
 ## Landmarks
 Use the same structure as their respective datasets.
