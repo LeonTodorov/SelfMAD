@@ -1,15 +1,16 @@
 import torch
 import numpy as np
 from tqdm import tqdm
-from model import Detector
+from utils.model import Detector
 import numpy as np
-from utils.dataset import PartialMorphDataset, MorDIFF
+from utils.dataset import PartialMorphDataset
+# from utils.dataset import MorDIFF
 from utils.metrics import calculate_eer, calculate_auc
 import json
 import argparse
 
 def main(eval_config):
-        
+    
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # print(f'Using device: {device}')
     
@@ -38,22 +39,24 @@ def main(eval_config):
     evaluate(model, test_loaders, device, calculate_means=True, verbose=True)
 
     # MORDIFF DATASET
-    test_datasets = default_datasets(image_size, datasets="MorDIFF", config=eval_config)
-    test_loaders = prep_dataloaders(test_datasets, batch_size)
+    # test_datasets = default_datasets(image_size, datasets="MorDIFF", config=eval_config)
+    # test_loaders = prep_dataloaders(test_datasets, batch_size)
     
-    if eval_config["verbose"]:
-        for dataset in test_datasets:
-            print(f'-----{dataset}:')
-            for method in test_datasets[dataset]:
-                print('-', method)
-                print("real", test_datasets[dataset][method].labels.count(0))
-                print("fake", test_datasets[dataset][method].labels.count(1))
+    # if eval_config["verbose"]:
+    #     for dataset in test_datasets:
+    #         print(f'-----{dataset}:')
+    #         for method in test_datasets[dataset]:
+    #             print('-', method)
+    #             print("real", test_datasets[dataset][method].labels.count(0))
+    #             print("fake", test_datasets[dataset][method].labels.count(1))
                 
-    evaluate(model, test_loaders, device, calculate_means=False, verbose=True)
+    # evaluate(model, test_loaders, device, calculate_means=False, verbose=True)
     
     
 def default_datasets(image_size, datasets="original", config=None):
-    assert datasets in ["original", "MorDIFF"]
+    assert datasets in ["original", 
+                        # "MorDIFF"
+                        ]
     # local
     # FRGC_datapath = "/mnt/hdd/leon/FRGC-Morphs_cropped/FRGC-Morphs_cropped"
     # FERET_datapath = "/mnt/hdd/leon/FERET-Morphs_cropped/FERET-Morphs_cropped"
@@ -86,15 +89,15 @@ def default_datasets(image_size, datasets="original", config=None):
     # local
     # datapath_fake='/mnt/hdd/leon/MorDIFF_crop'
     # datapath_real='/mnt/hdd/leon/FRLL-Morphs_cropped'
-    if datasets == "MorDIFF":
-        test_datasets = {
-            "MorDIFF": {
-                "MorDIFF": MorDIFF(datapath_fake=config["MorDIFF_f_path"],
-                                    datapath_real=config["MorDIFF_bf_path"],
-                                    image_size=image_size)
-            }
-        }
-        return test_datasets
+    # if datasets == "MorDIFF":
+    #     test_datasets = {
+    #         "MorDIFF": {
+    #             "MorDIFF": MorDIFF(datapath_fake=config["MorDIFF_f_path"],
+    #                                 datapath_real=config["MorDIFF_bf_path"],
+    #                                 image_size=image_size)
+    #         }
+    #     }
+    #     return test_datasets
     
 def prep_dataloaders(test_datasets, batch_size):
     test_loaders = {
@@ -116,21 +119,14 @@ def evaluate(model, test_loaders, device, calculate_means=True, verbose=False, m
         total_eers, total_aucs = [], []
     for dataset_loader in test_loaders:
         for method_loader in test_loaders[dataset_loader]:
-            # print("ding")
             output_dict = []
             target_dict = []
             for data in tqdm(test_loaders[dataset_loader][method_loader], desc=f"Evaluating {dataset_loader}_{method_loader}"):
-                # print(f'len(data): {len(data)}')
                 img = data[0].to(device, non_blocking=True).float()
                 target = data[1].to(device, non_blocking=True).long()
-                # print(img.shape, target.shape)
-                # print(target)
                 with torch.no_grad():
                     output = model(img)
                 if multi:
-                    # output is torch.Size([batch_size, 4])
-                    # target is torch.Size([batch_size])
-                    # make output torch.Size([batch_size, 2]), such that the output[:, 0] remains the same and output[:, 1] is the sum of output[:, 1] and output[:, 2] and output[:, 3]
                     output = torch.cat((output[:, 0].unsqueeze(1), output[:, 1:].sum(1).unsqueeze(1)), dim=1)
                 output_dict += output.softmax(1)[:, 1].cpu().data.numpy().tolist()
                 target_dict += target.cpu().data.numpy().tolist()
@@ -157,11 +153,11 @@ if __name__ == "__main__":
     parser.add_argument('-FRLL_path', type=str, required=False)
     parser.add_argument('-FRGC_path', type=str, required=False)
     parser.add_argument('-FERET_path', type=str, required=False)
-    parser.add_argument('-MorDIFF_f_path', type=str, required=False)
-    parser.add_argument('-MorDIFF_bf_path', type=str, required=False)
+    # parser.add_argument('-MorDIFF_f_path', type=str, required=False)
+    # parser.add_argument('-MorDIFF_bf_path', type=str, required=False)
     args = parser.parse_args()
 
-    eval_config = json.load(open("data_config.json"))
+    eval_config = json.load(open("./configs/data_config.json"))
     # add arguments to eval_config if they are not None
     for key in vars(args):
         if vars(args)[key] is not None:

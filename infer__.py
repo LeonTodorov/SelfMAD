@@ -1,6 +1,6 @@
 import argparse
 import torch
-from model import Detector
+from utils.model import Detector
 from PIL import Image
 import cv2
 import numpy as np
@@ -20,7 +20,7 @@ def main(args):
     image_size = 384 if "hrnet" in args.model_type else 380
     img = np.array(Image.open(args.input_path))
     img = cv2.resize(img, (image_size, image_size))
-    img=img.transpose((2,0,1))
+    img = img.transpose((2,0,1))
     img = img.astype('float32')/255
     img = img[np.newaxis, ...]
     img = torch.from_numpy(img).to(device, non_blocking=True).float()

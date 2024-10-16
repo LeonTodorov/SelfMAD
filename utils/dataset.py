@@ -101,42 +101,42 @@ class PartialMorphDataset(Dataset):
             img = self.transform(img)
         return img, label
     
-class MorDIFF(Dataset):
-    def __init__(self, datapath_fake, datapath_real, image_size, transform=None):
-        assert datapath_fake is not None
-        assert datapath_real is not None
+# class MorDIFF(Dataset):
+#     def __init__(self, datapath_fake, datapath_real, image_size, transform=None):
+#         assert datapath_fake is not None
+#         assert datapath_real is not None
         
-        labels = []
-        image_paths = []
-        for curr_faces in os.listdir(datapath_fake):
-            for root, _, files in os.walk(os.path.join(datapath_fake, curr_faces)):
-                if not files:
-                    continue
-                for filename in files:
-                    if filename.endswith(('.png', '.jpg')):
-                        image_paths.append(os.path.join(root, filename))
-                        labels.append(1)
+#         labels = []
+#         image_paths = []
+#         for curr_faces in os.listdir(datapath_fake):
+#             for root, _, files in os.walk(os.path.join(datapath_fake, curr_faces)):
+#                 if not files:
+#                     continue
+#                 for filename in files:
+#                     if filename.endswith(('.png', '.jpg')):
+#                         image_paths.append(os.path.join(root, filename))
+#                         labels.append(1)
 
-        for filename in os.listdir(os.path.join(datapath_real, 'FRLL-Morphs_cropped', 'raw')):
-            if filename.endswith(('.png', '.jpg')):
-                image_paths.append(os.path.join(datapath_real, 'FRLL-Morphs_cropped', 'raw', filename))
-                labels.append(0)
+#         for filename in os.listdir(os.path.join(datapath_real, 'FRLL-Morphs_cropped', 'raw')):
+#             if filename.endswith(('.png', '.jpg')):
+#                 image_paths.append(os.path.join(datapath_real, 'FRLL-Morphs_cropped', 'raw', filename))
+#                 labels.append(0)
 
-        self.image_paths = image_paths
-        self.labels = labels
-        self.transform = transform
-        self.img_size = image_size
+#         self.image_paths = image_paths
+#         self.labels = labels
+#         self.transform = transform
+#         self.img_size = image_size
 
-    def __len__(self):
-        return len(self.image_paths)
+#     def __len__(self):
+#         return len(self.image_paths)
 
-    def __getitem__(self, idx):
+#     def __getitem__(self, idx):
         
-        img=np.array(Image.open(self.image_paths[idx]))
-        label=self.labels[idx]
-        img = cv2.resize(img, (self.img_size, self.img_size))
-        img=img.transpose((2,0,1))
-        img = img.astype('float32')/255
-        if self.transform:
-            img = self.transform(img)
-        return img, label
+#         img=np.array(Image.open(self.image_paths[idx]))
+#         label=self.labels[idx]
+#         img = cv2.resize(img, (self.img_size, self.img_size))
+#         img=img.transpose((2,0,1))
+#         img = img.astype('float32')/255
+#         if self.transform:
+#             img = self.transform(img)
+#         return img, label

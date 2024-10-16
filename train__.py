@@ -10,7 +10,7 @@ import argparse
 from utils.logs import log
 from datetime import datetime
 from tqdm import tqdm
-from model import Detector
+from utils.model import Detector
 import json
 from utils.metrics import calculate_eer, calculate_auc
 from eval__ import default_datasets, prep_dataloaders, evaluate
@@ -83,12 +83,12 @@ def main(args):
         "FRGC_path": args["FRGC_path"],
         "FERET_path": args["FERET_path"]
     })
-    test_datasets_mordiff = default_datasets(image_size, datasets="MorDIFF", config={
-        "MorDIFF_f_path": args["MorDIFF_f_path"],
-        "MorDIFF_bf_path": args["MorDIFF_bf_path"]
-    })
+    # test_datasets_mordiff = default_datasets(image_size, datasets="MorDIFF", config={
+    #     "MorDIFF_f_path": args["MorDIFF_f_path"],
+    #     "MorDIFF_bf_path": args["MorDIFF_bf_path"]
+    # })
     test_loaders = prep_dataloaders(test_datasets, batch_size)
-    test_loaders_mordiff = prep_dataloaders(test_datasets_mordiff, batch_size)
+    # test_loaders_mordiff = prep_dataloaders(test_datasets_mordiff, batch_size)
     
 
     model=Detector(model=args["model"], lr=args["lr"])
@@ -155,11 +155,11 @@ def main(args):
         # TEST LOOP ###################################################
         model.train(mode=False)
         results_original_dataset = evaluate(model, test_loaders, device, calculate_means=True)
-        results_mordiff_dataset = evaluate(model, test_loaders_mordiff, device, calculate_means=False)
+        # results_mordiff_dataset = evaluate(model, test_loaders_mordiff, device, calculate_means=False)
         for dataset in results_original_dataset:
             log_text += f" {dataset}: auc: {results_original_dataset[dataset]['auc']:.4f}, eer: {results_original_dataset[dataset]['eer']:.4f} |"
-        for dataset in results_mordiff_dataset:
-            log_text += f" {dataset}: auc: {results_mordiff_dataset[dataset]['auc']:.4f}, eer: {results_mordiff_dataset[dataset]['eer']:.4f}"
+        # for dataset in results_mordiff_dataset:
+        #     log_text += f" {dataset}: auc: {results_mordiff_dataset[dataset]['auc']:.4f}, eer: {results_mordiff_dataset[dataset]['eer']:.4f}"
         # SAVE MODEL ###################################################
         if args["saving_strategy"] == "original":
             if len(weight_dict)<n_weight:
@@ -212,25 +212,24 @@ if __name__=='__main__':
     parser.add_argument('-e', dest='epochs', type=int, required=False)
     parser.add_argument('-v', dest='saving_strategy', type=str, required=False)
     parser.add_argument('-t', dest='train_dataset', type=str, required=False)
-    # parser.add_argument('-p', dest='train_datapath', type=str, required=False)
     parser.add_argument('-s', dest='save_path', type=str, required=False)
     parser.add_argument('-lr', dest='lr', type=float, required=False)
     parser.add_argument('-FRLL_path', type=str, required=False)
     parser.add_argument('-FRGC_path', type=str, required=False)
     parser.add_argument('-FERET_path', type=str, required=False)
-    parser.add_argument('-MorDIFF_f_path', type=str, required=False)
-    parser.add_argument('-MorDIFF_bf_path', type=str, required=False)
+    # parser.add_argument('-MorDIFF_f_path', type=str, required=False)
+    # parser.add_argument('-MorDIFF_bf_path', type=str, required=False)
     parser.add_argument('-SMDD_path', type=str, required=False)
     parser.add_argument('-FF_path', type=str, required=False)
 
     args=parser.parse_args()
 
-    train_config = json.load(open("train_config.json"))
+    train_config = json.load(open("./configs/train_config.json"))
     for key in vars(args):
         if vars(args)[key] is not None:
             train_config[key] = vars(args)[key]
 
-    data_config = json.load(open("data_config.json"))
+    data_config = json.load(open("./configs/data_config.json"))
     # also add the data config
     for key in data_config:
         if vars(args)[key] is None:

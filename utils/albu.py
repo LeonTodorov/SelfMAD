@@ -47,32 +47,30 @@ class FrequencyPatterns(alb.DualTransform):
                 self.pattern_stripes,
             ]
 
-    def apply(self, img, required_pattern_fn=None, return_pattern=False,  copy=True, **params):
+    def apply(self, img, return_pattern=False,  copy=True, **params):
         result_channels = []
 
-        if self.mode == 7 and pattern_functions is None:
-            pattern_functions = [np.random.choice(self.geometric_patterns), np.random.choice(self.peaks_patterns), np.random.choice(self.fourier_patterns)]
-        elif required_pattern_fn is not None:
-            pattern_functions = required_pattern_fn
+        if self.mode == 7:
+            pattern_functions = [
+                np.random.choice(self.geometric_patterns),
+                np.random.choice(self.peaks_patterns),
+                np.random.choice(self.fourier_patterns)
+            ]
         else:
-            pattern_functions = np.random.choice(self.patterns, size=np.random.randint(1, self.max_multi+1), replace=True)
-        
+            pattern_functions = np.random.choice(
+                self.patterns, 
+                size=np.random.randint(1, self.max_multi + 1), 
+                replace=True
+            )
         pattern = None
         for pattern_function in pattern_functions:
             res = pattern_function(cols=img.shape[1], rows=img.shape[0])
-            if pattern is None:
-                pattern = res[0]
-            else:
-                pattern += res[0]
+            pattern = res[0] if pattern is None else pattern + res[0]
         make_pattern_fft = res[1]
 
-        if make_pattern_fft:
-            f_pattern = np.fft.fft2(pattern, s=(img.shape[0], img.shape[1]))
-        else:
-            f_pattern = pattern
+        f_pattern = np.fft.fft2(pattern, s=(img.shape[0], img.shape[1])) if make_pattern_fft else pattern
 
         f_transform_channels = []
-        
         for channel in range(img.shape[2]):
             if self.mode == 0:
                 f_transform_channel = np.fft.fft2(img[..., channel])

@@ -491,7 +491,7 @@ if __name__=='__main__':
 	datapath=args.datapath
 
 	img_size=256
-	batch_size=64
+	batch_size=20
 	image_dataset=selfMAD_Dataset(phase='train',image_size=img_size, datapath=datapath)
 
 	dataloader = torch.utils.data.DataLoader(image_dataset,
