@@ -114,6 +114,11 @@ TODO
 ## Labels
 Use the same structure as their respective datasets.
 TODO
+# Pre-trained model
+We offer the pretrained HRNet-W18 model weights, which were used to achieve the results presented in the paper.  
+You can download the weights from the following link: 
+[HRNet-W18 Checkpoint](https://drive.google.com/file/d/1NOPppjuVxXLc4qu3Bs2AZQUErYzSdSG4/view?usp=sharing)
+
 # Inference
 ```bash
 python infer__.py -m <model> -p <path_to_checkpoint> -in <path_to_input_img>
@@ -133,5 +138,27 @@ To start model evaluation from the root directory of the project, run the follow
 ```bash
 python eval__.py -m <model> -p <path_to_checkpoint>
 ```
+Using the provided pretrained model we can reproduce the results presented in the paper:
+```bash
+python eval__.py -m hrnet_w18 -p ./checkpoints/hrnet_w18_checkpoint.tar
+```
+
+| Metric    | Value  |
+|-----------|--------|
+| **FRGC_fm (EER)** | 5.59   |
+| **FRGC_cv (EER)** | 2.59   |
+| **FRGC_sg (EER)** | 15.84  |
+| **FERET_fm (EER)** | 3.19   |
+| **FERET_cv (EER)** | 1.13   |
+| **FERET_sg (EER)** | 18.14  |
+| **FRLL_amsl (EER)** | 0.99   |
+| **FRLL_fm (EER)** | 0.26   |
+| **FRLL_cv (EER)** | 0.16   |
+| **FRLL_sg (EER)** | 10.31  |
+| **FRLL_wm (EER)** | 3.45   |
+|-----------|--------|
+| **Mean (EER)** | 5.61   |
+
+
 # Citation
 TODO
