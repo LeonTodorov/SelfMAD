@@ -4,6 +4,8 @@
 > Marija Ivanovska, Leon Todorov, Naser Damer, Deepak Kumar Jain, Peter Peer, Vitomir Štruc  
 > *FG 2025 Preprint*
 
+Examples of simulated general morphing attack artifacts
+![examples_img](https://github.com/user-attachments/assets/1afdd7b3-3be7-4bb9-bab9-e514bb00e32e)
 
 # Author's Development Enviroment
 * GPU: NVIDIA GeForce RTX 4090
