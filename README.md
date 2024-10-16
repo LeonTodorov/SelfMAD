@@ -24,7 +24,7 @@ Python 3.10
   
 Environment setup (conda):
 ```bash
-conda env create -f env.yml
+conda env create -f ./conda/env.yml
 conda activate selfMAD_env
 ```
 
