@@ -123,7 +123,12 @@ You can download the weights from the following link:
 ```bash
 python infer__.py -m <model> -p <path_to_checkpoint> -in <path_to_input_img>
 ```
+We can use the provided pretrained model with some examples:
+```bash
+python infer__.py -m hrnet_w18 -p ./checkpoints/hrnet_w18_checkpoint.tar -in ./images/morph.jpg
+```
 The output in terminal indicates the confidence that the image is a morph.
+
 # Training
 Before starting the training process, ensure that the dataset paths are properly configured in the `data_config.json` file.   
 Additional training parameters can be tuned in the `train_config.json` file as needed.  
