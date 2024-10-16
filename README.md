@@ -82,7 +82,7 @@ conda activate selfMAD_env
 
 ## FRGC Dataset Structure
 ```
-<path to FRLL dataset>    
+<path to FRGC dataset>    
 └── <method>      
     └── *.jpg
 ```
