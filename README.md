@@ -4,7 +4,7 @@
 > Marija Ivanovska, Leon Todorov, Naser Damer, Deepak Kumar Jain, Peter Peer, Vitomir Štruc  
 > *FG 2025 Preprint*
 
-Examples of simulated general morphing attack artifacts
+Examples of simulated general morphing attack artifacts observed during training:
 ![examples_img](https://github.com/user-attachments/assets/1afdd7b3-3be7-4bb9-bab9-e514bb00e32e)
 
 # Author's Development Enviroment
@@ -123,11 +123,17 @@ You can download the weights from the following link:
 
 # Inference
 ```bash
-python infer__.py -m <model> -p <path_to_checkpoint> -in <path_to_input_img>
+CUDA_VISIBLE_DEVICES=* python infer__.py \
+-m <model> \
+-p <path_to_checkpoint> \
+-in <path_to_input_img>
 ```
 We can use the provided pretrained model with some examples:
 ```bash
-python infer__.py -m hrnet_w18 -p ./checkpoints/hrnet_w18_checkpoint.tar -in ./images/morph.jpg
+CUDA_VISIBLE_DEVICES=* python infer__.py \
+-m hrnet_w18 \
+-p ./checkpoints/hrnet_w18_checkpoint.tar \
+-in ./images/morph.jpg
 ```
 The output in terminal indicates the confidence that the image is a morph.
 
@@ -136,18 +142,23 @@ Before starting the training process, ensure that the dataset paths are properly
 Additional training parameters can be tuned in the `train_config.json` file as needed.  
 To start the training from the root directory of the project, run the following command:
 ```bash
-python train__.py -n <session_name>
+CUDA_VISIBLE_DEVICES=* python train__.py \
+-n <session_name>
 ```
-Command-line arguments (specified in `train.py`) will override any default values set in these configuration files.
+Command-line arguments (specified in `train.py`) will override any default values set in the configuration files.
 # Evaluation
 Before starting the evaluation process, ensure that the dataset paths are properly configured in the `data_config.json` file.   
 To start model evaluation from the root directory of the project, run the following command:
 ```bash
-python eval__.py -m <model> -p <path_to_checkpoint>
+CUDA_VISIBLE_DEVICES=* python eval__.py \
+-m <model> \
+-p <path_to_checkpoint>
 ```
 Using the provided pretrained model we can reproduce the results presented in the paper:
 ```bash
-python eval__.py -m hrnet_w18 -p ./checkpoints/hrnet_w18_checkpoint.tar
+CUDA_VISIBLE_DEVICES=* python eval__.py \
+-m hrnet_w18 \
+-p ./checkpoints/hrnet_w18_checkpoint.tar
 ```
 
 | Metric    | Value  |
