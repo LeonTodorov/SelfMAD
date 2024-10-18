@@ -9,15 +9,8 @@ class MorphDataset(Dataset):
     def __init__(self, datapath, image_size, phase='train', transform=None):
         assert datapath is not None
         if "FF++" in datapath:
-            # dataset = "FF++"
             assert phase in ['train','val','test']
             datapath = os.path.join(datapath, phase)
-        # elif 'FRLL' in datapath:
-        #     dataset = "FRLL"
-        # elif 'FRGC' in datapath:
-        #     dataset = "FRGC"
-        # elif 'FERET' in datapath:
-        #     dataset = "FERET"
         
         labels = []
         image_paths = []
@@ -66,7 +59,6 @@ class PartialMorphDataset(Dataset):
         elif 'FERET' in datapath:
             assert method in ['facemorpher', 'opencv', 'stylegan']
             self.dataset_name = f"FERET_{method}"
-
 
         labels = []
         image_paths = []

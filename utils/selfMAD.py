@@ -14,71 +14,40 @@ warnings.filterwarnings('ignore')
 
 class selfMAD_Dataset(Dataset):
 	def __init__(self,phase='train',image_size=256,datapath=None):
-		
-		assert datapath is not None
-		if "FF++" in datapath:
-			dataset = "FF++"
-			assert phase in ['train','val','test']	
-		elif 'FRLL' in datapath:
-			dataset = "FRLL"
-		elif 'FRGC' in datapath:
-			dataset = "FRGC"
-		elif 'FERET' in datapath:
-			dataset = "FERET"
-		elif 'SMDD' in datapath:
-			dataset = "SMDD"
 
-		# FaceForesics++ (already has train, val, test split)
+		assert datapath is not None
+		image_root = datapath
+		landmark_root = image_root + "_landmarks"
+		label_root = image_root + "_labels"
 		if "FF++" in datapath:
 			datapath = os.path.join(datapath, phase, "real")
-
-		# FRLL, FRGC, FERET (data is not split into train, val, test), so just ignore phase, return whole dataset
+			assert phase in ['train','val','test']	
 		elif any(method in datapath for method in ['FRLL', 'FRGC', 'FERET']):
 			datapath = os.path.join(datapath, "raw")
+		elif 'SMDD' in datapath:
+			datapath = os.path.join(datapath, "os25k_bf_t")
 
-		# SMDD is already set up
-		
-		image_list = []
+		image_list, landmark_list, label_list = [], [], []
 		for root, _, files in os.walk(datapath):
-			if not files:
-				continue
 			for filename in files:
 				if filename.endswith(('.png', '.jpg')):
-					image_list.append(os.path.join(root, filename))
-
-		label_list = [0]*len(image_list)
-
-		landmark_list = []
-		filtered_image_list = []
-		filtered_label_list = []
-		face_labels = []
-
-		for i, image_pth in enumerate(image_list):
-			landmark_pth = image_pth.replace(dataset, f'{dataset}_landmarks', -1)
-			landmark_pth = landmark_pth.replace('.png', '.npy').replace('.jpg', '.npy')
-			# Filter images via available landmarks
-			if not os.path.isfile(landmark_pth):
-				continue
-			landmark_list.append(landmark_pth)
-			filtered_image_list.append(image_pth)
-			filtered_label_list.append(label_list[i])
-			if dataset == "FF++":
-				face_label_path = landmark_pth.replace('FF++_landmarks', 'FF++_labels', 1)
-				face_label_path = face_label_path.replace('FF++_landmarks', 'FF++')
-			elif dataset == "SMDD":
-				face_label_path = landmark_pth.replace('SMDD_landmarks', 'SMDD_labels', 1)
-				face_label_path = face_label_path.replace('SMDD_landmarks', 'SMDD')
-			face_labels.append(face_label_path)
+					img_path = os.path.join(root, filename)
+					landmark_path = img_path.replace(image_root, landmark_root, -1).replace('.png', '.npy').replace('.jpg', '.npy')
+					label_path = img_path.replace(image_root, label_root, -1).replace('.png', '.npy').replace('.jpg', '.npy')
+					if not os.path.isfile(landmark_path) or not os.path.isfile(label_path):
+						continue
+					image_list.append(img_path)
+					landmark_list.append(landmark_path)
+					label_list.append(label_path)
 	
 		self.path_lm=landmark_list
-		self.face_labels = face_labels
-		self.image_list=filtered_image_list
-		self.label_list=label_list
+		self.face_labels = label_list
+		self.image_list=image_list
 		self.image_size=(image_size,image_size)
 		self.phase=phase
 		self.transforms=self.get_transforms()
 		self.source_transforms = self.get_source_transforms()
-
+		# print(len(self.image_list), len(self.path_lm), len(self.face_labels))
 
 	def __len__(self):
 		return len(self.image_list)
@@ -89,11 +58,13 @@ class selfMAD_Dataset(Dataset):
 			try:
 				filename=self.image_list[idx]
 				img=np.array(Image.open(filename))
-				landmark=np.load(self.path_lm[idx])[0]
+				landmark = np.load(self.path_lm[idx])
+				landmark = landmark[0] if len(landmark) == 1 else landmark # FF => (81, 2); SMDD (1, 81, 2)
 				landmark=self.reorder_landmark(landmark)
+
 				bbox = np.array([landmark[:,0].min(),landmark[:,1].min(),landmark[:,0].max(),landmark[:,1].max()]).reshape(2,2)
 				face_label = np.load(self.face_labels[idx])
-
+			
 				# random HFLIP
 				if self.phase=='train':
 					if np.random.rand()<0.5:
@@ -288,18 +259,18 @@ class selfMAD_Dataset(Dataset):
 			x1,y1=bbox[1]
 			w=x1-x0
 			h=y1-y0
-			w0_margin=w/4#0#np.random.rand()*(w/8)
+			w0_margin=w/4
 			w1_margin=w/4
-			h0_margin=h/4#0#np.random.rand()*(h/5)
+			h0_margin=h/4
 			h1_margin=h/4
 		else:
 			x0,y0=landmark[:68,0].min(),landmark[:68,1].min()
 			x1,y1=landmark[:68,0].max(),landmark[:68,1].max()
 			w=x1-x0
 			h=y1-y0
-			w0_margin=w/8#0#np.random.rand()*(w/8)
+			w0_margin=w/8
 			w1_margin=w/8
-			h0_margin=h/2#0#np.random.rand()*(h/5)
+			h0_margin=h/2
 			h1_margin=h/5
 		if margin:
 			w0_margin*=4
@@ -307,10 +278,10 @@ class selfMAD_Dataset(Dataset):
 			h0_margin*=2
 			h1_margin*=2
 		elif phase=='train':
-			w0_margin*=(np.random.rand()*0.6+0.2)#np.random.rand()
-			w1_margin*=(np.random.rand()*0.6+0.2)#np.random.rand()
-			h0_margin*=(np.random.rand()*0.6+0.2)#np.random.rand()
-			h1_margin*=(np.random.rand()*0.6+0.2)#np.random.rand()	
+			w0_margin*=(np.random.rand()*0.6+0.2)
+			w1_margin*=(np.random.rand()*0.6+0.2)
+			h0_margin*=(np.random.rand()*0.6+0.2)
+			h1_margin*=(np.random.rand()*0.6+0.2)
 		else:
 			w0_margin*=0.5
 			w1_margin*=0.5
@@ -480,10 +451,6 @@ if __name__=='__main__':
 	torch.cuda.manual_seed(seed)
 	torch.backends.cudnn.deterministic = True
 	torch.backends.cudnn.benchmark = False
-
-	# local
-	# datapath=  "/mnt/hdd/leon/FF++_10/old_FF++_every_10_frame"
-	# datapath = "/mnt/hdd/leon/SMDD_release_train/os25k_bf_t/"
 
 	parser=argparse.ArgumentParser()
 	parser.add_argument('--datapath',type=str, required=True)
