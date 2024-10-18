@@ -12,7 +12,6 @@ import argparse
 def main(eval_config):
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    # print(f'Using device: {device}')
     
     model_state_path = eval_config["model_path"]
     model = Detector(model=eval_config["model_type"])
@@ -24,7 +23,7 @@ def main(eval_config):
     image_size = 384 if "hrnet" in eval_config["model_type"] else 380
     batch_size = 32
 
-    # ORIGINAL DATASETS
+    # ORIGINAL DATASETS (FRGC, FERET, FRLL)
     test_datasets = default_datasets(image_size, datasets="original", config=eval_config)
     test_loaders = prep_dataloaders(test_datasets, batch_size)
 
@@ -57,10 +56,6 @@ def default_datasets(image_size, datasets="original", config=None):
     assert datasets in ["original", 
                         # "MorDIFF"
                         ]
-    # local
-    # FRGC_datapath = "/mnt/hdd/leon/FRGC-Morphs_cropped/FRGC-Morphs_cropped"
-    # FERET_datapath = "/mnt/hdd/leon/FERET-Morphs_cropped/FERET-Morphs_cropped"
-    # FRLL_datapath = "/mnt/hdd/leon/FRLL-Morphs_cropped/FRLL-Morphs_cropped"
     if datasets == "original":
         FRGC_datapath = config["FRGC_path"]
         FERET_datapath = config["FERET_path"]
@@ -86,9 +81,6 @@ def default_datasets(image_size, datasets="original", config=None):
             }
         }
         return test_datasets
-    # local
-    # datapath_fake='/mnt/hdd/leon/MorDIFF_crop'
-    # datapath_real='/mnt/hdd/leon/FRLL-Morphs_cropped'
     # if datasets == "MorDIFF":
     #     test_datasets = {
     #         "MorDIFF": {
@@ -158,7 +150,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     eval_config = json.load(open("./configs/data_config.json"))
-    # add arguments to eval_config if they are not None
     for key in vars(args):
         if vars(args)[key] is not None:
             eval_config[key] = vars(args)[key]

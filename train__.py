@@ -18,7 +18,7 @@ from eval__ import default_datasets, prep_dataloaders, evaluate
 def main(args):
 
     assert args["model"] in ["efficientnet-b4", "efficientnet-b7", "swin", "resnet", "hrnet_w18", "hrnet_w32", "hrnet_w44", "hrnet_w64"]
-    assert args["train_dataset"] in ["FF", "SMDD"]
+    assert args["train_dataset"] in ["FF++", "SMDD"]
     assert args["saving_strategy"] in ["original", "testset_best"]
 
     # FOR REPRODUCIBILITY
@@ -42,22 +42,13 @@ def main(args):
     }
 
     device = torch.device('cuda')
-
-    # if args.train_dataset == "FF":
-    #     train_datapath = val_datapath = '/mnt/hdd/leon/FF++_10/old_FF++_every_10_frame'
-    # elif args.train_dataset == "SMDD":
-    #     train_datapath = "/mnt/hdd/leon/SMDD_release_train/os25k_bf_t/"
-    
-    # No validation set in this case.
-    if args["train_dataset"] == "SMDD":
-        assert args["saving_strategy"] == "testset_best"
     
     image_size=cfg['image_size']
     batch_size=cfg['batch_size']
     train_datapath = args["SMDD_path"] if args["train_dataset"] == "SMDD" else args["FF_path"]
     train_dataset=selfMAD_Dataset(phase='train',image_size=image_size, datapath=train_datapath)
-    if args["train_dataset"] == "FF":
-        val_dataset=selfMAD_Dataset(phase='val',image_size=image_size, datapath=train_datapath)
+    if args["saving_strategy"] == "original": # valset is always FF++
+        val_dataset=selfMAD_Dataset(phase='val',image_size=image_size, datapath=args["FF_path"])
 
     train_loader=torch.utils.data.DataLoader(train_dataset,
                         batch_size=batch_size//2,
@@ -68,7 +59,7 @@ def main(args):
                         drop_last=True,
                         worker_init_fn=train_dataset.worker_init_fn
                         )
-    if args["train_dataset"] == "FF":
+    if args["saving_strategy"] == "original":
         val_loader=torch.utils.data.DataLoader(val_dataset,
                             batch_size=batch_size,
                             shuffle=False,
@@ -83,13 +74,13 @@ def main(args):
         "FRGC_path": args["FRGC_path"],
         "FERET_path": args["FERET_path"]
     })
+
+    test_loaders = prep_dataloaders(test_datasets, batch_size)
     # test_datasets_mordiff = default_datasets(image_size, datasets="MorDIFF", config={
     #     "MorDIFF_f_path": args["MorDIFF_f_path"],
     #     "MorDIFF_bf_path": args["MorDIFF_bf_path"]
     # })
-    test_loaders = prep_dataloaders(test_datasets, batch_size)
     # test_loaders_mordiff = prep_dataloaders(test_datasets_mordiff, batch_size)
-    
 
     model=Detector(model=args["model"], lr=args["lr"])
     model=model.to('cuda')
@@ -97,8 +88,6 @@ def main(args):
     lr_scheduler=LinearDecayLR(model.optimizer, n_epoch, int(n_epoch/4*3))
     
     now=datetime.now()
-    # local
-    # save_path='/mnt/hdd/leon/models'
     save_path='{}/{}'.format(args["save_path"], args["session_name"])+'_'+now.strftime("%m_%d_%H_%M_%S")+'/'
     os.mkdir(save_path)
     os.mkdir(save_path+'weights/')
@@ -134,7 +123,7 @@ def main(args):
                         train_loss/len(train_loader),
                         )
         # VAL LOOP ##################################################
-        if args["train_dataset"] == "FF":
+        if args["saving_strategy"] == "original":
             model.train(mode=False)
             output_dict=[]
             target_dict=[]
@@ -155,11 +144,11 @@ def main(args):
         # TEST LOOP ###################################################
         model.train(mode=False)
         results_original_dataset = evaluate(model, test_loaders, device, calculate_means=True)
-        # results_mordiff_dataset = evaluate(model, test_loaders_mordiff, device, calculate_means=False)
         for dataset in results_original_dataset:
             log_text += f" {dataset}: auc: {results_original_dataset[dataset]['auc']:.4f}, eer: {results_original_dataset[dataset]['eer']:.4f} |"
         # for dataset in results_mordiff_dataset:
         #     log_text += f" {dataset}: auc: {results_mordiff_dataset[dataset]['auc']:.4f}, eer: {results_mordiff_dataset[dataset]['eer']:.4f}"
+        # results_mordiff_dataset = evaluate(model, test_loaders_mordiff, device, calculate_means=False)
         # SAVE MODEL ###################################################
         if args["saving_strategy"] == "original":
             if len(weight_dict)<n_weight:
@@ -204,9 +193,9 @@ def main(args):
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
 
-    # require name of run
+    # required
     parser.add_argument('-n',dest='session_name', type=str, required=True)
-    # specified in train_config.json, but can be overriden here
+    # specified in train_config.json
     parser.add_argument('-m',dest='model',type=str,required=False)
     parser.add_argument('-b', dest='batch_size', type=int, required=False)
     parser.add_argument('-e', dest='epochs', type=int, required=False)
@@ -221,7 +210,6 @@ if __name__=='__main__':
     # parser.add_argument('-MorDIFF_bf_path', type=str, required=False)
     parser.add_argument('-SMDD_path', type=str, required=False)
     parser.add_argument('-FF_path', type=str, required=False)
-
     args=parser.parse_args()
 
     train_config = json.load(open("./configs/train_config.json"))
@@ -230,10 +218,8 @@ if __name__=='__main__':
             train_config[key] = vars(args)[key]
 
     data_config = json.load(open("./configs/data_config.json"))
-    # also add the data config
     for key in data_config:
         if vars(args)[key] is None:
             train_config[key] = data_config[key]
-    # print(train_config)
 
     main(train_config)
