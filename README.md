@@ -118,9 +118,13 @@ Use the same structure as their respective datasets.
 TODO
 # Pre-trained model
 We offer the pretrained HRNet-W18 model weights, which were used to achieve the results presented in the paper.  
-You can download the weights from the following link: 
-[HRNet-W18 Checkpoint](https://drive.google.com/file/d/1NOPppjuVxXLc4qu3Bs2AZQUErYzSdSG4/view?usp=sharing)
-
+You can download the weights from the following links:  
+[HRNet-W18 Checkpoint](https://drive.google.com/file/d/1NOPppjuVxXLc4qu3Bs2AZQUErYzSdSG4/view?usp=sharing)  
+[EfficientNet-b4 Checkpoint](https://drive.google.com/file/d/1fB7_u-VCwa8Mqo1i2c_DoL0E6vLDVcUG/view?usp=sharing)   
+[EfficientNet-b7 Checkpoint](https://drive.google.com/file/d/1drjnA7SsM3Pk9QqYpqM7asbEQ4EhzE4A/view?usp=sharing)  
+[Swin_base Checkpoint](https://drive.google.com/file/d/1kih2GrRrbQdhESarE5SmAlttK1J3Jnn-/view?usp=sharing)  
+[ResNet-152 Checkpoint](https://drive.google.com/file/d/1GILjjbHBXsKg1ctxVdAnuBPTIAZz70l4/view?usp=sharing)  
+ 
 # Inference
 ```bash
 CUDA_VISIBLE_DEVICES=* python infer__.py \
