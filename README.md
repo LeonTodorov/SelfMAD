@@ -111,11 +111,19 @@ conda activate selfMAD_env
 **Dataset Source:**  [Idiap research institute website](https://www.idiap.ch/en/scientific-research/data/feret-morphs)
 
 ## Landmarks
-Use the same structure as their respective datasets.
-TODO
+Generated landmarks have the same structure as the input datasets.
+```bash
+python preprocessing/dlib_lm.py \
+-i <path_to_dataset_root> \
+-o <path_to_output_root>
+```
 ## Labels
-Use the same structure as their respective datasets.
-TODO
+Generated labels have the same structure as the input datasets.
+```bash
+CUDA_VISIBLE_DEVICES=* python preprocessing/face_labels.py.py \
+-i <path_to_dataset_root> \
+-o <path_to_output_root>
+```
 # Pre-trained model
 We offer the pretrained HRNet-W18 model weights, which were used to achieve the results presented in the paper.  
 You can download the weights from the following links:  
