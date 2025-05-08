@@ -1,5 +1,6 @@
 # Self-supervised Morphing Attack Detection method
-![SelfMAD](https://github.com/user-attachments/assets/d59c1b00-da81-4c57-b6b7-112dbc9292f6)
+![SelfMAD](https://github.com/user-attachments/assets/926e2319-880b-4eee-bbd3-99895966bcbd)
+
 > [**SelfMAD: Enhancing Generalization and Robustness in Morphing Attack Detection via Self-Supervised Learning**](https://arxiv.org/abs/2504.05504),  
 > Marija Ivanovska, Leon Todorov, Naser Damer, Deepak Kumar Jain, Peter Peer, Vitomir Štruc  
 > *FG 2025 Preprint*
