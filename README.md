@@ -1,6 +1,6 @@
 # Self-supervised Morphing Attack Detection method
 ![SelfMAD](https://github.com/user-attachments/assets/d59c1b00-da81-4c57-b6b7-112dbc9292f6)
-> [**SelfMAD: Enhancing Generalization and Robustness in Morphing Attack Detection via Self-Supervised Learning**](),  
+> [**SelfMAD: Enhancing Generalization and Robustness in Morphing Attack Detection via Self-Supervised Learning**](https://arxiv.org/abs/2504.05504),  
 > Marija Ivanovska, Leon Todorov, Naser Damer, Deepak Kumar Jain, Peter Peer, Vitomir Štruc  
 > *FG 2025 Preprint*
 
@@ -182,13 +182,27 @@ CUDA_VISIBLE_DEVICES=* python eval__.py \
 | **FERET_cv (EER)** | 1.13   |
 | **FERET_sg (EER)** | 18.14  |
 | **FRLL_amsl (EER)** | 0.99   |
-| **FRLL_fm (EER)** | 0.26   |
-| **FRLL_cv (EER)** | 0.16   |
-| **FRLL_sg (EER)** | 10.31  |
+| **FRLL_fm (EER)** | 0.00   |
+| **FRLL_cv (EER)** | 0.00   |
+| **FRLL_sg (EER)** | 10.34  |
 | **FRLL_wm (EER)** | 3.45   |
+| **morphPIPE (EER)** | 5.89 |
+| **GreedyDiM (EER)** | 7.60 |
+| **MorCode (EER)** | 4.08 |
 |-----------|--------|
-| **Mean (EER)** | 5.61   |
+| **Mean (EER)** | 5.63   |
 
 
 # Citation
-TODO
+If our work contributes to your research, we would appreciate it if you cite our paper:
+```bibtex
+@misc{ivanovska2025selfmadenhancinggeneralizationrobustness,
+      title={SelfMAD: Enhancing Generalization and Robustness in Morphing Attack Detection via Self-Supervised Learning}, 
+      author={Marija Ivanovska and Leon Todorov and Naser Damer and Deepak Kumar Jain and Peter Peer and Vitomir Štruc},
+      year={2025},
+      eprint={2504.05504},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2504.05504}, 
+}
+```
