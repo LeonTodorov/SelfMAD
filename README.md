@@ -197,13 +197,15 @@ CUDA_VISIBLE_DEVICES=* python eval__.py \
 # Citation
 If our work contributes to your research, we would appreciate it if you cite our paper:
 ```bibtex
-@misc{ivanovska2025selfmadenhancinggeneralizationrobustness,
-      title={SelfMAD: Enhancing Generalization and Robustness in Morphing Attack Detection via Self-Supervised Learning}, 
-      author={Marija Ivanovska and Leon Todorov and Naser Damer and Deepak Kumar Jain and Peter Peer and Vitomir Štruc},
-      year={2025},
-      eprint={2504.05504},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2504.05504}, 
+@INPROCEEDINGS{ivanovska2025selfmadenhancinggeneralizationrobustness,
+  author={Ivanovska, Marija and Todorov, Leon and Damer, Naser and Jain, Deepak Kumar and Peer, Peter and Štruc, Vitomir},
+  booktitle={2025 IEEE 19th International Conference on Automatic Face and Gesture Recognition (FG)}, 
+  title={{SelfMAD: Enhancing Generalization and Robustness in Morphing Attack Detection via Self-Supervised Learning}}, 
+  year={2025},
+  volume={},
+  number={},
+  pages={1-10},
+  keywords={Training;Error analysis;Face recognition;Source coding;Self-supervised learning;Gesture recognition;Robustness;Fraud;Faces;Overfitting},
+  doi={10.1109/FG61629.2025.11099381}
 }
 ```
