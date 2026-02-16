@@ -28,27 +28,27 @@ def save_crop(org_path, save_path, face_detector, face_predictor, forget=False):
     if len(faces) == 0:
         print('No faces in {}'.format(org_path))
         return 
-    landmarks = []
-    size_list = []
+    # Select the face with the largest area and crop only that face
+    largest_area = 0
+    largest_landmark = None
     for face_idx in range(len(faces)):
         landmark = face_predictor(frame, faces[face_idx])
         landmark = face_utils.shape_to_np(landmark)
         x0,y0=landmark[:, 0].min(), landmark[:, 1].min()
         x1,y1=landmark[:, 0].max(), landmark[:, 1].max()
         face_s = (x1 - x0) * (y1 - y0)
-        size_list.append(face_s)
-        landmarks.append(landmark)
-    landmarks = np.concatenate(landmarks).reshape((len(size_list),) + landmark.shape)
-    landmarks = landmarks[np.argsort(np.array(size_list))[::-1]]
-    frame_cropped = crop_face(frame, landmarks)
+        if face_s > largest_area:
+            largest_area = face_s
+            largest_landmark = landmark
+
+    if largest_landmark is None:
+        print('No landmarks in {}'.format(org_path))
+        return
+    frame_cropped = crop_face(frame, largest_landmark)
     print(f"{org_path}({frame.shape}) -> {save_path}({frame_cropped.shape})")
     if not forget:
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         cv2.imwrite(save_path, cv2.cvtColor(frame_cropped, cv2.COLOR_RGB2BGR))
-    
-    if len(landmarks) == 0:
-        print('No landmarks in {}'.format(org_path))
-        return
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
