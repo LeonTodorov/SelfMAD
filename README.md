@@ -128,11 +128,11 @@ CUDA_VISIBLE_DEVICES=* python preprocessing/face_labels.py.py \
 # Pre-trained model
 We offer the pretrained HRNet-W18 model weights, which were used to achieve the results presented in the paper.  
 You can download the weights from the following links:  
-[HRNet-W18 Checkpoint](https://drive.google.com/file/d/1NOPppjuVxXLc4qu3Bs2AZQUErYzSdSG4/view?usp=sharing)  
-[EfficientNet-b4 Checkpoint](https://drive.google.com/file/d/1fB7_u-VCwa8Mqo1i2c_DoL0E6vLDVcUG/view?usp=sharing)   
-[EfficientNet-b7 Checkpoint](https://drive.google.com/file/d/1drjnA7SsM3Pk9QqYpqM7asbEQ4EhzE4A/view?usp=sharing)  
-[Swin_base Checkpoint](https://drive.google.com/file/d/1kih2GrRrbQdhESarE5SmAlttK1J3Jnn-/view?usp=sharing)  
-[ResNet-152 Checkpoint](https://drive.google.com/file/d/1GILjjbHBXsKg1ctxVdAnuBPTIAZz70l4/view?usp=sharing)  
+[HRNet-W18 Checkpoint](https://unilj-my.sharepoint.com/:u:/g/personal/leon_todorov_fe1_uni-lj_si/IQBzniGljbCuQJlfCmohiKPRAQ0egj37SFWZ5dlD10-jhjA?e=Cnp1Gx)  
+[EfficientNet-b4 Checkpoint](https://unilj-my.sharepoint.com/:u:/g/personal/leon_todorov_fe1_uni-lj_si/IQChuvrGwFUZT7rwtIDYgoHfAfDz9I1Xz3gOoyYtDP4Um24?e=NfzU38)   
+[EfficientNet-b7 Checkpoint](https://unilj-my.sharepoint.com/:u:/g/personal/leon_todorov_fe1_uni-lj_si/IQBLJu9ccYcjT4dNqPk8b7jgAUv_1y0DpfsrEiMAGiM9W3M?e=udHSGg)  
+[Swin_base Checkpoint](https://unilj-my.sharepoint.com/:u:/g/personal/leon_todorov_fe1_uni-lj_si/IQAIAjqyK0QtQrKtzEi6UbLrAW9Cnk4K0r8FQ7zqTxL1oBA?e=lCxDu0)  
+[ResNet-152 Checkpoint](https://unilj-my.sharepoint.com/:u:/g/personal/leon_todorov_fe1_uni-lj_si/IQC25qbq9VHtSIxERZFgExCTARU_OUIJfaUSwnmvPieZtM4?e=BG4gio)  
  
 # Inference
 ```bash
